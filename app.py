@@ -1,13 +1,12 @@
-from xmlrpc.client import UNSUPPORTED_ENCODING
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-
 
 st.write('''
 # US Vehicle Advertisement Listings
 ''')
 
+# Multi selection for which car brands to view data for the rest of the page
 cars = st.multiselect("Select car brands to view data",
     ['Acura', 'BMW', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Dodge', 'Ford', 'GMC', 'Honda', 'Hyundai', 'Jeep', 'Kia', 'Mercedes-Benz', 'Nissan', 'Ram', 'Subaru', 'Toyota', 'Volkswagen'],
     ['Acura'])
@@ -55,7 +54,6 @@ fig3 = px.histogram(selected_cars, x='type', color='make', opacity=.8, histnorm=
 fig3.update_layout(xaxis_title_text='Type of Vehicle')
 st.header('Type of Vehicles by Car Brand')
 st.plotly_chart(fig3, use_container_width=True)
-
 
 # Scatter plot of odometer reading vs price
 st.header('Odometer Reading vs Price')
