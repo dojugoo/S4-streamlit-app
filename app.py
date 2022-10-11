@@ -1,3 +1,4 @@
+from xmlrpc.client import UNSUPPORTED_ENCODING
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -54,3 +55,28 @@ fig3 = px.histogram(selected_cars, x='type', color='make', opacity=.8, histnorm=
 fig3.update_layout(xaxis_title_text='Type of Vehicle')
 st.header('Type of Vehicles by Car Brand')
 st.plotly_chart(fig3, use_container_width=True)
+
+
+# Scatter plot of odometer reading vs price
+st.header('Odometer Reading vs Price')
+trendline = st.checkbox('Add Trendline', False, key='t1')
+# Toggle option to add trendline to data
+if trendline:
+    tline = 'ols'
+else:
+    tline = None
+fig4 = px.scatter(selected_cars, x='odometer', y='price', color='make', symbol='make', trendline=tline)
+fig4.update_layout(xaxis_title_text='Odometer Reading')
+st.plotly_chart(fig4, use_container_width=True)
+
+# Scatter plot of number of days listed vs price
+st.header('Number of Days Listed for Sale vs Price')
+trendline2 = st.checkbox('Add Trendline', False, key='t2')
+# Toggle option to add trendline to data
+if trendline2:
+    tline2 = 'ols'
+else:
+    tline2 = None
+fig5 = px.scatter(selected_cars, x='days_listed', y='price', color='make', symbol='make', trendline=tline2)
+fig5.update_layout(xaxis_title_text='Days Listed')
+st.plotly_chart(fig5, use_container_width=True)
