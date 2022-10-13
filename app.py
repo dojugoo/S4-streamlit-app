@@ -6,19 +6,6 @@ st.write('''
 # US Vehicle Advertisement Listings
 ''')
 
-# Multi selection for which car brands to view data for the rest of the page
-cars = st.multiselect("Select car brands to view data",
-    ['Acura', 'BMW', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Dodge', 'Ford', 'GMC', 'Honda', 'Hyundai', 'Jeep', 'Kia', 'Mercedes-Benz', 'Nissan', 'Ram', 'Subaru', 'Toyota', 'Volkswagen'],
-    ['Acura'])
-
-# Creates query string to select on car makes from selection 
-query_str = ""
-for i, make in enumerate(cars):
-    if i == 0:
-        query_str = "make == " + '\'' + make.lower() + '\''
-    else:
-        query_str += " or make == " + '\'' + make.lower() + '\''
-
 # Read US vehicles sales advertisement into df
 df = pd.read_csv('vehicles_us.csv')
 
@@ -27,8 +14,26 @@ def make_split(model):
     return model.split(' ')[0]
 df['make'] = df['model'].apply(make_split)
 
-# Filter dataframe on query string
-selected_cars = df.query(query_str)
+# Due to few data points for mercedes-benz, remove from the data for this visualization
+df = df.query("make != 'mercedes-benz'")
+
+# Multi selection for which car brands to view data for the rest of the page
+cars = st.multiselect("Select car brands to view data",
+    ['All Makes', 'Acura', 'BMW', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Dodge', 'Ford', 'GMC', 'Honda', 'Hyundai', 'Jeep', 'Kia', 'Nissan', 'Ram', 'Subaru', 'Toyota', 'Volkswagen'],
+    ['Acura'])
+
+# Creates query string to select on car makes from selection 
+query_str = ""
+if 'All Makes' in cars:
+    selected_cars = df
+else:
+    for i, make in enumerate(cars):
+        if i == 0:
+            query_str = "make == " + '\'' + make.lower() + '\''
+        else:
+            query_str += " or make == " + '\'' + make.lower() + '\''
+    # Filter dataframe on query string
+    selected_cars = df.query(query_str)
 
 # Normalize histograms by percent if checked
 norm = st.checkbox('Normalize Data', False)
@@ -63,7 +68,10 @@ if trendline:
     tline = 'ols'
 else:
     tline = None
-fig4 = px.scatter(selected_cars, x='odometer', y='price', color='make', symbol='make', trendline=tline)
+
+# Remove missing odometer rows in dataset
+selected_cars_odometer = selected_cars.dropna(subset=['odometer'])
+fig4 = px.scatter(selected_cars_odometer, x='odometer', y='price', color='make', symbol='make', trendline=tline)
 fig4.update_layout(xaxis_title_text='Odometer Reading')
 st.plotly_chart(fig4, use_container_width=True)
 
