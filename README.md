@@ -1,4 +1,4 @@
-# Practicum Sprint 4
+# Used Car Vehicle Sales Listing App
 
 ## Description of Project
 The purpose of this project is to build and deploy a web application dashboard to a cloud service. 
