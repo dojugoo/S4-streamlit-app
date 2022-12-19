@@ -1,4 +1,4 @@
-# Practicum - Sprint 4 - Software Development Tools Project
+# Practicum Sprint 4
 
 ## Description of Project
 The purpose of this project is to build and deploy a web application dashboard to a cloud service. 
